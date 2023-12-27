@@ -1,5 +1,3 @@
-#![deny(unused_crate_dependencies)]
-
 //! A set of logging macros that print not only timestamp and log level,
 //! but also file name, line and column.
 //!

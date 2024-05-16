@@ -1,5 +1,116 @@
 # Changelog
 
+## [0.9.0](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.8.0...v0.9.0) (2024-04-24)
+
+
+### Features
+
+* Adds filtering of erc20 tokens by their l2 address ([#447](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/447)) ([09f8810](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/09f88105090009cc39f8ba900044ddca41e13aaf))
+
+
+### Bug Fixes
+
+* do not track l2_to_l1_logs block height on restart ([#445](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/445)) ([90655c1](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/90655c11c4f5f0ceae60ecac8070a0da791b58d5))
+
+## [0.8.0](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.7.0...v0.8.0) (2024-03-27)
+
+
+### Features
+
+* add filtering by l1 recepient ([#423](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/423)) ([cef3f12](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/cef3f1247d89265a18d3f39ce3315ccb4eb9b458))
+
+## [0.7.0](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.6.6...v0.7.0) (2024-03-15)
+
+
+### Features
+
+* removes finalizer api ([#411](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/411)) ([2bda706](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/2bda70609d03daa1f36a8bfe8b86969c223cf488))
+
+
+### Bug Fixes
+
+* **ci:** update whoami ([#403](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/403)) ([0c99c23](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/0c99c232b8d41de4dc954a884c62ce1360f96a09))
+
+## [0.6.6](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.6.5...v0.6.6) (2024-03-04)
+
+
+### Bug Fixes
+
+* disable l2 to l1 events because of eip4844 ([#398](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/398)) ([29b6a72](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/29b6a72bb3927fe1a100332f664d40f41042099e))
+
+## [0.6.5](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.6.4...v0.6.5) (2024-02-21)
+
+
+### Bug Fixes
+
+* **storage:** add necessary indices for api query ([#392](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/392)) ([a7a5918](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/a7a5918f7edcc8f762a25db4c2e968e120e0c9c2))
+* **storage:** remove filtering by l2 addrs ([#394](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/394)) ([6d7e7a4](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/6d7e7a402dc7deffba18fcfd74b50000cc995587))
+
+## [0.6.4](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.6.3...v0.6.4) (2024-02-11)
+
+
+### Bug Fixes
+
+* typos ([16a4159](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/16a4159806f8001d65d1dbbbc6312124a660b49d))
+* typos ([#383](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/383)) ([16a4159](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/16a4159806f8001d65d1dbbbc6312124a660b49d))
+
+## [0.6.3](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.6.2...v0.6.3) (2024-01-30)
+
+
+### Bug Fixes
+
+* **storage:** return withdrawals for address for l1 and l2 addrs matches ([#378](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/378)) ([b0628f1](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/b0628f17a29f954065f1cae4a632f82bc1f2262d))
+
+## [0.6.2](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.6.1...v0.6.2) (2024-01-19)
+
+
+### Bug Fixes
+
+* **api:** use permissive cors ([#361](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/361)) ([dab6780](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/dab6780de8699c9b4fb5f9dccc85be7fdfd0af58))
+
+## [0.6.1](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.6.0...v0.6.1) (2024-01-18)
+
+
+### Bug Fixes
+
+* **api:** Healtcheck and api fixes ([#360](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/360)) ([7f4a7e9](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/7f4a7e9fd002c191b982dd3036dfb6986f448ccc))
+* change types on api ([#358](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/358)) ([a43e955](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/a43e9553f16a3d8dcc486b4666f55bfaeb20f5ba))
+
+## [0.6.0](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.5.0...v0.6.0) (2024-01-18)
+
+
+### Features
+
+* **api:** adds api to finalizer to query withdrawals ([#354](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/354)) ([ef5e147](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/ef5e14701d48534c12a5c31f4cc9b991b42e6576))
+
+## [0.5.0](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.4.0...v0.5.0) (2024-01-17)
+
+
+### Features
+
+* **l1:** parse l2 to l1 message ([#352](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/352)) ([c5eb7e5](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/c5eb7e5be2f76911f6d797a7b6de44f9c78ea42c))
+
+
+### Bug Fixes
+
+* **storage:** remove order by to optimize query ([#349](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/349)) ([0fbddd4](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/0fbddd49d17945778574ef8ab27522753f85ae7f))
+
+## [0.4.0](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.3.4...v0.4.0) (2024-01-16)
+
+
+### Features
+
+* **contracts:** Add the WithdrawalFinalizer Contract ([#314](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/314)) ([aa71fcb](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/aa71fcb7cdac8c2dcc557a53431738b7be847da8))
+
+
+### Bug Fixes
+
+* **chain-events:** do not listen to withdrawalinitiated events ([#347](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/347)) ([08e6971](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/08e6971fb31c72fd55441b781ef185afd52953b3))
+* **deps:** update dependency @matterlabs/zksync-contracts to ^0.6.0 ([#317](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/317)) ([6067bc1](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/6067bc11751b7cdede63a38053b897df9a095d61))
+* **deps:** update dependency ethers to v6 ([#329](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/329)) ([a3ca0bd](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/a3ca0bde3bb8ad1d69c6ff8ecde724b09b68e6ff))
+* **deps:** update dependency zksync-web3 to ^0.17.0 ([#318](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/318)) ([2cb7d58](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/2cb7d5820b267c7ba4068deccdfb8ed72019f121))
+* **finalizer:** introduce an optional threshold to eth withdrawals ([#348](https://github.com/matter-labs/zksync-withdrawal-finalizer/issues/348)) ([a4e91dd](https://github.com/matter-labs/zksync-withdrawal-finalizer/commit/a4e91dd1fe20639314f9441185da6cb8ec0d598f))
+
 ## [0.3.4](https://github.com/matter-labs/zksync-withdrawal-finalizer/compare/v0.3.3...v0.3.4) (2023-11-14)
 
 

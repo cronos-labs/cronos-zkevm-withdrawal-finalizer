@@ -14,7 +14,10 @@ use ethers::{
     types::U256,
 };
 use eyre::{anyhow, Result};
-use sqlx::{postgres::PgConnectOptions, ConnectOptions, PgConnection, PgPool};
+use sqlx::{
+    postgres::{PgConnectOptions, PgPoolOptions},
+    ConnectOptions, PgConnection,
+};
 
 use chain_events::{BlockEvents, L2EventsListener};
 use client::{l1bridge::codegen::IL1Bridge, zksync_contract::codegen::IZkSync, ZksyncMiddleware};
@@ -52,25 +55,13 @@ where
     M2: Middleware,
     <M2 as Middleware>::Provider: JsonRpcClient,
 {
-    match (
-        storage::last_l2_to_l1_events_block_seen(conn).await?,
-        storage::last_l1_block_seen(conn).await?,
-    ) {
-        (Some(b1), Some(b2)) => Ok(std::cmp::min(b1, b2)),
-        (b1, b2) => {
-            if b1.is_none() {
-                tracing::info!(concat!(
-                    "information about l2 to l1 events is missing, ",
-                    "starting from L1 block corresponding to L2 block 1"
-                ));
-            }
-
-            if b2.is_none() {
-                tracing::info!(concat!(
-                    "information about last block seen is missing, ",
-                    "starting from L1 block corresponding to L2 block 1"
-                ));
-            }
+    match storage::last_l1_block_seen(conn).await? {
+        Some(b2) => Ok(b2),
+        None => {
+            tracing::info!(concat!(
+                "information about last block seen is missing, ",
+                "starting from L1 block corresponding to L2 block 1"
+            ));
 
             let block_details = client_l2
                 .provider()
@@ -176,7 +167,10 @@ async fn main() -> Result<()> {
     let options =
         PgConnectOptions::from_str(config.database_url.as_str())?.disable_statement_logging();
 
-    let pgpool = PgPool::connect_with(options).await?;
+    let pgpool = PgPoolOptions::new()
+        .acquire_timeout(Duration::from_secs(2))
+        .connect_with(options)
+        .await?;
 
     let from_l2_block = start_from_l2_block(
         client_l2.clone(),
@@ -207,10 +201,15 @@ async fn main() -> Result<()> {
         tokens.extend_from_slice(custom_tokens.0.as_slice());
     }
 
-    tracing::info!("tokens {tokens:?}");
     if let Some(ref custom_tokens) = config.custom_token_deployer_addresses {
         tokens.extend_from_slice(custom_tokens.0.as_slice());
     }
+
+    if let Some(only_finalize_these_tokens) = config.only_finalize_these_tokens {
+        tokens.retain(|token| only_finalize_these_tokens.0.contains(token));
+    }
+
+    tracing::info!("tokens {tokens:?}");
 
     let l2_events = L2EventsListener::new(
         config.api_web3_json_rpc_ws_url.as_str(),
@@ -282,8 +281,14 @@ async fn main() -> Result<()> {
         config.batch_finalization_gas_limit,
     );
 
+    let eth_finalization_threshold = match config.eth_finalization_threshold {
+        Some(eth_finalization_threshold) => {
+            Some(ethers::utils::parse_ether(eth_finalization_threshold)?)
+        }
+        None => None,
+    };
     let finalizer = finalizer::Finalizer::new(
-        pgpool,
+        pgpool.clone(),
         one_withdrawal_gas_limit,
         batch_finalization_gas_limit,
         contract,
@@ -291,10 +296,16 @@ async fn main() -> Result<()> {
         l1_bridge,
         config.tx_retry_timeout,
         finalizer_account_address,
-        config.tokens_to_finalize.unwrap_or_default(),
         meter_withdrawals,
+        eth_finalization_threshold,
+        config.only_l1_recipients.map(|v| v.0.into_iter().collect()),
     );
     let finalizer_handle = tokio::spawn(finalizer.run(client_l2));
+
+    let metrics_handle = tokio::spawn(metrics::meter_unfinalized_withdrawals(
+        pgpool.clone(),
+        eth_finalization_threshold,
+    ));
 
     tokio::select! {
         r = block_events_handle => {
@@ -308,6 +319,9 @@ async fn main() -> Result<()> {
         }
         r = finalizer_handle => {
             tracing::error!("Finalizer ended with {r:?}");
+        }
+        _ = metrics_handle => {
+            tracing::error!("Metrics loop has ended");
         }
     }
 

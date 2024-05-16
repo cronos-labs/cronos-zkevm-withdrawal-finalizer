@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use envconfig::Envconfig;
 use ethers::types::Address;
-use finalizer::{AddrList, TokenList};
+use finalizer::AddrList;
 use serde::{Deserialize, Serialize};
 use url::Url;
 
@@ -66,9 +66,6 @@ pub struct Config {
     #[envconfig(from = "TX_RETRY_TIMEOUT_SECS")]
     pub tx_retry_timeout: usize,
 
-    #[envconfig(from = "TOKENS_TO_FINALIZE")]
-    pub tokens_to_finalize: Option<TokenList>,
-
     #[envconfig(from = "FINALIZE_ETH_TOKEN")]
     pub finalize_eth_token: Option<bool>,
 
@@ -83,6 +80,16 @@ pub struct Config {
 
     #[envconfig(from = "CUSTOM_TOKEN_ADDRESS_MAPPINGS")]
     pub custom_token_address_mappings: Option<CustomTokenAddressMappings>,
+
+    #[envconfig(from = "ETH_FINALIZATION_THRESHOLD")]
+    pub eth_finalization_threshold: Option<String>,
+
+    #[envconfig(from = "ONLY_L1_RECIPIENTS")]
+    pub only_l1_recipients: Option<AddrList>,
+
+    /// Only finalize these tokens specified by their L2 addresses
+    #[envconfig(from = "ONLY_FINALIZE_THESE_TOKENS")]
+    pub only_finalize_these_tokens: Option<AddrList>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Eq, PartialEq)]

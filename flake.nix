@@ -1,12 +1,8 @@
 {
-  inputs.crane.url = "github:ipetkov/crane";
-  inputs.fenix.url = "github:nix-community/fenix";
   inputs.flake-utils.url = "github:numtide/flake-utils";
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
   outputs = {
-    crane,
-    fenix,
     flake-utils,
     nixpkgs,
     ...
@@ -14,49 +10,20 @@
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
 
-      inherit (pkgs.lib) cleanSourceWith;
-
-      toolchain = with fenix.packages.${system};
-        combine [
-          default.rustc
-          default.cargo
-        ];
-      craneLib = (crane.mkLib pkgs).overrideToolchain toolchain;
-
-      src = cleanSourceWith {
+      src = pkgs.lib.cleanSourceWith {
         src = ./.;
         filter = _: _: true;
       };
-
-      commonArgs = with pkgs; {
-        inherit src;
-
-        strictDeps = true;
-
-        cargoLock = ./Cargo.lock;
-        cargoToml = ./Cargo.toml;
-
-        buildInputs = [
-          openssl
-        ];
-        nativeBuildInputs = [pkg-config];
-
-        BINDGEN_EXTRA_CLANG_ARGS = ''-I"${libclang.lib}/lib/clang/16/include"'';
-        LIBCLANG_PATH = lib.makeLibraryPath [libclang.lib];
-      };
-
-      cargoArtifacts = craneLib.buildDepsOnly (commonArgs
-        // {
-        });
-      
-      withdrawal-finalizer = craneLib.buildPackage (commonArgs
-        // {
-          inherit cargoArtifacts;
-
-          cargoExtraArgs = "--bin withdrawal-finalizer";
-        });
-
     in {
-      packages.withdrawal-finalizer = withdrawal-finalizer;
+      packages.withdrawal-finalizer = pkgs.rustPlatform.buildRustPackage {
+        pname = "withdrawal-finalizer";
+        version = "1.0.0";
+        inherit src;
+        cargoLock = {
+          lockFile = ./Cargo.lock;
+          allowBuiltinFetchGit = true;
+        };
+        doCheck = false;
+      };
     });
 }
